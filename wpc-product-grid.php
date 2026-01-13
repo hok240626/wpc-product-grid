@@ -462,7 +462,7 @@ function wpc_handle_contact_submission() {
  */
 add_filter( 'the_content', 'wpc_thank_you_content' );
 function wpc_thank_you_content( $content ) {
-    if ( strpos($_SERVER['REQUEST_URI'], 'thank-you') !== false ) {
+    if ( isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'thank-you') !== false ) {
         // Pixel / GA4 Event Snippet
         $ga4_script = "<script>
           if(typeof gtag === 'function') {
@@ -487,9 +487,10 @@ function wpc_thank_you_content( $content ) {
 
 // 確保 /thank-you 不會跳 404
 add_action( 'template_redirect', function() {
-    if ( strpos($_SERVER['REQUEST_URI'], 'thank-you') !== false && is_404() ) {
+    if ( isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'thank-you') !== false && is_404() ) {
         status_header( 200 );
         include( get_query_template( 'page' ) );
         die();
     }
 });
+
